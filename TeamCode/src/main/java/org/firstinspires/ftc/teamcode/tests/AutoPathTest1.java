@@ -1,0 +1,72 @@
+package org.firstinspires.ftc.teamcode.tests;
+
+import static com.pedropathing.api.Paths.*;
+import com.pedropathing.api.Paths;
+
+import com.pedropathing.api.PoseFactory;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.math.Pose;
+import com.pedropathing.paths.Path;
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.Scheduler;
+import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.commands.Commands.*;
+import static com.pedropathing.ivy.groups.Groups.sequential;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.pedro.Constants;
+
+@Autonomous(name = "AutoPath-Test-1", group = "Autonomous")
+public class AutoPathTest1 extends LinearOpMode {
+
+    private Follower follower;
+
+    private final PoseFactory poseFactory = PoseFactory.degrees();
+
+    private final Pose start = poseFactory.of(14.3993, 9.6536, 90);
+    private final Pose path1 = poseFactory.of(60, 36, 270);
+
+    // Autonomous routine
+    public Command autoRoutine() {
+        return sequential(
+                follow(follower, path1())
+        );
+    }
+
+    @Override
+    public void runOpMode() {
+        Scheduler.reset();
+        follower = Constants.create(hardwareMap);
+        follower.setPose(start);
+        follower.update();
+
+        waitForStart();
+        schedule(autoRoutine());
+
+        while (opModeIsActive()) {
+            follower.update();
+            Scheduler.execute();
+
+            // Telemetry streamed to Driver Station and Panels Dashboard
+            telemetry.addData("Status", "Autonomous Running");
+            telemetry.addData("Robot X (in)", follower.pose().x());
+            telemetry.addData("Robot Y (in)", follower.pose().y());
+            telemetry.addData("Robot Heading (deg)", Math.toDegrees(follower.pose().heading()));
+
+            if (follower.currentPath() != null) {
+                telemetry.addData("Path Distance Remaining", follower.distanceToEndpoint());
+                telemetry.addData("Path Index", follower.pathIndex());
+            } else {
+                telemetry.addData("Path State", "Path Completed or Null");
+            }
+
+            telemetry.update();
+        }
+    }
+
+    public Path path1() {
+        return Paths.line(start, path1).linear(start, path1);
+    }
+}
