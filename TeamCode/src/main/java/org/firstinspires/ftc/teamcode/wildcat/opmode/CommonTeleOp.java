@@ -5,6 +5,7 @@ import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
+import org.firstinspires.ftc.teamcode.wildcat.robot.FlowerKicker;
 import org.firstinspires.ftc.teamcode.wildcat.robot.InTake;
 import org.firstinspires.ftc.teamcode.wildcat.robot.Shooter;
 import org.firstinspires.ftc.teamcode.wildcat.robot.Turret;
@@ -15,12 +16,14 @@ public class CommonTeleOp  extends OpMode {
     protected InTake intake;
     protected Shooter shooter;
     protected Turret turret;
+    protected FlowerKicker flowerKicker;
     @Override
     public void init() {
         follower = Constants.create(hardwareMap);
         this.intake = new InTake(this);
         this.shooter = new Shooter(this);
         this.turret = new Turret(this);
+        this.flowerKicker = new FlowerKicker(this);
     }
 
     @Override
@@ -29,6 +32,7 @@ public class CommonTeleOp  extends OpMode {
         this.intake.loop();
         this.shooter.loop();
         this.turret.loop();
+        this.flowerKicker.loop();
 
         Pose robotPose = follower.pose(); // returns a Pose object
         telemetry.addData("Robot X", robotPose.x());

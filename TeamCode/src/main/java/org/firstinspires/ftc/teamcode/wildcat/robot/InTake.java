@@ -20,7 +20,6 @@ public class InTake {
     }
 
     public void loop() {
-
         this.leftIntakeMotor.setPower(this.opMode.gamepad2.left_stick_y);
         this.rightIntakeMotor.setPower(this.opMode.gamepad2.right_stick_y);
     }

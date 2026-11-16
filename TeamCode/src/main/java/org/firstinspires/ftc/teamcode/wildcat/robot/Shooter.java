@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.wildcat.robot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Shooter {
 
@@ -15,18 +16,17 @@ public class Shooter {
     private final DcMotorEx shooterMotor;
     private double speed = MIN_SPEED;
 
-    private int loopCount = 0;
+    private ElapsedTime elapsedTime;
     public Shooter(OpMode opMode) {
         this.opMode = opMode;
+        this.elapsedTime = new ElapsedTime();
         this.shooterMotor = this.opMode.hardwareMap.get(DcMotorEx.class, "shooter");
         this.shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void loop() {
-        loopCount++;
-
-        if(loopCount > 10) {
-            loopCount = 0;
+        if(elapsedTime.seconds() > 0.3) {
+            elapsedTime.reset();
             if (this.opMode.gamepad2.left_bumper) {
                 speed = speed - SPEED_CHANGE;
                 speed = Math.max(MIN_SPEED, Math.min(MAX_SPEED, speed));
