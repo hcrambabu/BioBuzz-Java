@@ -7,14 +7,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class FlowerKicker {
 
-    private final double MIN_POS = 0;
-    private final double MAX_POS = 0.8;
+    private static final double MIN_POS = 0.25;
+    private static final double MAX_POS = 0.8;
 
     private final OpMode opMode;
     private final ServoImplEx leftServo;
     private final ServoImplEx rightServo;
 
-    private ElapsedTime elapsedTime;
+    private final ElapsedTime elapsedTime;
     private double position = MAX_POS;
     public FlowerKicker(OpMode opMode) {
         this.opMode = opMode;
@@ -26,9 +26,9 @@ public class FlowerKicker {
     public void loop() {
         if(elapsedTime.seconds() > 0.3) {
             elapsedTime.reset();
-            if(this.opMode.gamepad1.right_bumper) {
+            if(this.opMode.gamepad2.right_bumper) {
                 position = MIN_POS;
-            } else if (this.opMode.gamepad1.left_bumper) {
+            } else if (this.opMode.gamepad2.left_bumper) {
                 position = MAX_POS;
             }
         }
